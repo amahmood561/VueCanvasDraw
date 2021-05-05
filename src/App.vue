@@ -1,0 +1,65 @@
+<template>
+  <div id="app">
+    <h1>Drawing with mousemove event</h1>
+    <canvas id="myCanvas" width="560" height="360" @mousedown="beginDrawing" @mousemove="keepDrawing" @mouseup="stopDrawing" />
+  </div>
+
+</template>
+
+<script>
+
+export default {
+  name: 'App',
+  components: {},
+  methods: {
+    drawLine(x1, y1, x2, y2) {
+      let ctx = this.canvas;
+      ctx.beginPath();
+      ctx.strokeStyle = 'black';
+      ctx.lineWidth = 1;
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
+      ctx.closePath();
+    },
+    beginDrawing(e) {
+      this.x = e.offsetX;
+      this.y = e.offsetY;
+      this.isDrawing = true;
+    },
+    keepDrawing(e) {
+      if (this.isDrawing === true) {
+        this.drawLine(this.x, this.y, e.offsetX, e.offsetY);
+        this.x = e.offsetX;
+        this.y = e.offsetY;
+      }
+    },
+    stopDrawing(e) {
+      if (this.isDrawing === true) {
+        this.drawLine(this.x, this.y, e.offsetX, e.offsetY);
+        this.x = 0;
+        this.y = 0;
+        this.isDrawing = false;
+      }
+    }
+  },
+  mounted() {
+    var c = document.getElementById("myCanvas");
+    this.canvas = c.getContext('2d');
+  }
+}
+</script>
+
+<style>
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+}
+#myCanvas {
+  border: 1px solid grey;
+}
+</style>
